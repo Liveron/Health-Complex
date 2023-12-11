@@ -5,6 +5,8 @@ builder.Services.AddDbContext<UserDb>(options =>
     options.UseNpgsql(builder.Configuration.GetConnectionString("Pgsql"));
 });
 
+builder.Services.AddScoped<IUserRepository, UserRepository>();
+
 var app = builder.Build();
 
 if (app.Environment.IsDevelopment())

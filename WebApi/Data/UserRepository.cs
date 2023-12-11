@@ -3,37 +3,57 @@ namespace HealthComplex.WebApi.Data;
 
 public class UserRepository : IUserRepository
 {
-    public Task<List<User>> GetUsersAsync()
+    UserDb _userDb;
+    public UserRepository(UserDb userDb)
     {
-        throw new NotImplementedException();
+        _userDb = userDb;
+    }
+    public async Task<List<User>> GetUsersAsync()
+    {
+        return await _userDb.Users.ToListAsync();
     }
 
-    public Task<User> GetUserAsync(int userId)
+    public async Task<User> GetUserAsync(int userId)
     {
-        throw new NotImplementedException();
+        return await _userDb.Users.FindAsync(new object[] { userId });
     }
 
-    public Task DeleteUserAsync(int userId)
+    public async Task DeleteUserAsync(int userId)
     {
-        throw new NotImplementedException();
+        User userFromDb = await _userDb.Users.FindAsync(new object[] { userId });
+        if (userFromDb == null) return;
+        _userDb.Users.Remove(userFromDb);
     }
 
-    public Task InsertUserAsync(User user)
+    public async Task InsertUserAsync(User user)
     {
-        throw new NotImplementedException();
+        await _userDb.Users.AddAsync(user);
     }
 
-    public Task UpdateUserAsync(User user)
+    public async Task UpdateUserAsync(User user)
     {
         throw new NotImplementedException();
     }
-    public Task SaveAsync()
+    public async Task SaveAsync()
     {
-        throw new NotImplementedException();
+        await _userDb.SaveChangesAsync();
     }
 
+    private bool _disposed = false;
+    protected virtual void Dispose(bool disposing)
+    {
+        if (!_disposed)
+        {
+            if (disposing)
+            {
+                _userDb.Dispose();
+            }
+        }
+        _disposed = true;
+    }
     public void Dispose()
     {
-        throw new NotImplementedException();
+        Dispose(true);
+        GC.SuppressFinalize(this);
     }
 }
