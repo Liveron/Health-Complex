@@ -6,11 +6,27 @@ public static class UsersApi
 {
     public static RouteGroupBuilder MapUsersApi(this RouteGroupBuilder group)
     {
-        group.MapGet("/", GetAllUsers);
-        group.MapGet("/{id}", GetUser);
-        group.MapPost("/", InsertUser);
-        group.MapPut("/{id}", UpdateUser);
-        group.MapDelete("/{id}", DeleteUser);
+        group.MapGet("/", GetAllUsers)
+            .Produces<List<User>>(StatusCodes.Status200OK)
+            .WithName("GetAllUsers");
+
+        group.MapGet("/{id}", GetUser)
+            .Produces<User>(StatusCodes.Status200OK)
+            .WithName("GetUser");
+
+        group.MapPost("/", InsertUser)
+            .Accepts<User>("application/json")
+            .Produces<User>(StatusCodes.Status201Created)
+            .WithName("CreateUser");
+
+        group.MapPut("/{id}", UpdateUser)
+            .Accepts<User>("application/json")
+            .WithName("UpdateUser")
+            .Produces(StatusCodes.Status204NoContent);
+
+        group.MapDelete("/{id}", DeleteUser)
+            .WithName("DeleteUser")
+            .Produces(StatusCodes.Status204NoContent);
 
         return group;
     }

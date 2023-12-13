@@ -15,12 +15,12 @@ public class UserRepository : IUserRepository
 
     public async Task<User> GetUserAsync(int userId)
     {
-        return await _userDb.Users.FindAsync(new object[] { userId });
+        return await _userDb.Users.FindAsync([userId]);
     }
 
     public async Task DeleteUserAsync(int userId)
     {
-        User userFromDb = await _userDb.Users.FindAsync(new object[] { userId });
+        User userFromDb = await _userDb.Users.FindAsync([userId]);
         if (userFromDb == null) return;
         _userDb.Users.Remove(userFromDb);
     }
